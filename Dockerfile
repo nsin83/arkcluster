@@ -19,7 +19,7 @@ RUN <<EOT bash # Install dependencies and clean up
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOT
 
-ARG ARKMANAGER_VERSION=1.6.62
+ARG ARKMANAGER_VERSION=1.6.67
 
 ENV USER_ID=1000 \
     GROUP_ID=1000
