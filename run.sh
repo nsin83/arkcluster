@@ -91,6 +91,7 @@ if [ ! -d /ark/server ] || [ ! -f /ark/server/version.txt ]; then
     chown -R steam:steam /ark/server
     touch /ark/server/.installing-ark
     if [ -n "${BETA_INSTALL}" ] ; then
+        log "Installing beta ${BETA_INSTALL}"
         arkmanager install --beta="${BETA_INSTALL}" --dots
     else
         arkmanager install --dots
