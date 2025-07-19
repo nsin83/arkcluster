@@ -2,11 +2,10 @@
 FROM phusion/baseimage:jammy-1.0.1
 # https://github.com/phusion/baseimage-docker
 
-LABEL org.opencontainers.image.authors="Richard Kuhnt <r15ch13+git@gmail.com>" \
-      org.opencontainers.image.title="ARK Cluster Image" \
+LABEL org.opencontainers.image.title="ARK Cluster Image" \
       org.opencontainers.image.description="ARK Cluster Image" \
-      org.opencontainers.image.url="https://github.com/r15ch13/arkcluster" \
-      org.opencontainers.image.source="https://github.com/r15ch13/arkcluster"
+      org.opencontainers.image.url="https://github.com/nsin83/arkcluster" \
+      org.opencontainers.image.source="https://github.com/nsin83/arkcluster"
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
