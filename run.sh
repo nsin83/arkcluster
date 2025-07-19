@@ -112,7 +112,7 @@ log "Launching ark server ..."
 if [ "${UPDATEONSTART}" -eq 1 ]; then
     arkmanager start
 else
-    arkmanager start -noautoupdate
+    arkmanager start --noautoupdate
 fi
 
 # Stop server in case of signal INT or TERM
