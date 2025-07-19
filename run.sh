@@ -90,7 +90,11 @@ if [ ! -d /ark/server ] || [ ! -f /ark/server/version.txt ]; then
     touch /ark/server/ShooterGame/Binaries/Linux/ShooterGameServer
     chown -R steam:steam /ark/server
     touch /ark/server/.installing-ark
-    arkmanager install --dots
+    if [ -n "${BETA_INSTALL}" ] ; then
+        arkmanager install --beta="${BETA_INSTALL}" --dots
+    else
+        arkmanager install --dots
+    fi
     rm -f /ark/server/.installing-ark
 else
     if [ "${BACKUPONSTART}" -eq 1 ] && [ "$(ls -A /ark/server/ShooterGame/Saved/SavedArks/)" ]; then
