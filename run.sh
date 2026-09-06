@@ -82,7 +82,7 @@ fi
 chown -R steam:steam /ark /home/steam /cluster
 log "###########################################################################"
 
-if [ ! -d /ark/server ] || [ ! -f /ark/server/version.txt ]; then
+if [ ! -d /ark/server ] || [ ! -f /ark/server/version.txt ] || [ ! -x /ark/server/ShooterGame/Binaries/Linux/ShooterGameServer ]; then
     log "No game files found. Installing..."
     mkdir -p /ark/server/ShooterGame/Saved/SavedArks
     mkdir -p /ark/server/ShooterGame/Content/Mods
@@ -90,13 +90,18 @@ if [ ! -d /ark/server ] || [ ! -f /ark/server/version.txt ]; then
     touch /ark/server/ShooterGame/Binaries/Linux/ShooterGameServer
     chown -R steam:steam /ark/server
     touch /ark/server/.installing-ark
+    install_status=0
     if [ -n "${BETA_INSTALL}" ] ; then
         log "Installing beta ${BETA_INSTALL}"
-        arkmanager install --beta="${BETA_INSTALL}" --dots
+        arkmanager install --beta="${BETA_INSTALL}" --dots || install_status=$?
     else
-        arkmanager install --dots
+        arkmanager install --dots || install_status=$?
     fi
     rm -f /ark/server/.installing-ark
+    if [ "$install_status" -ne 0 ] || [ ! -x /ark/server/ShooterGame/Binaries/Linux/ShooterGameServer ]; then
+        log "ARK installation failed; server executable was not installed. Check /ark/log/arkmanager.log."
+        exit 1
+    fi
 else
     if [ "${BACKUPONSTART}" -eq 1 ] && [ "$(ls -A /ark/server/ShooterGame/Saved/SavedArks/)" ]; then
         log "Creating Backup ..."
@@ -108,16 +113,26 @@ log "###########################################################################
 log "Installing Mods ..."
 if ! arkmanager checkmodupdate --revstatus; then
     touch /ark/server/.installing-mods
-    arkmanager installmods --dots
+    if ! arkmanager installmods --dots; then
+        rm -f /ark/server/.installing-mods
+        log "Mod installation failed; check /ark/log/arkmanager.log."
+        exit 1
+    fi
     rm -f /ark/server/.installing-mods
 fi
 
 log "###########################################################################"
 log "Launching ark server ..."
 if [ "${UPDATEONSTART}" -eq 1 ]; then
-    arkmanager start
+    if ! arkmanager start; then
+        log "ARK startup failed; check /ark/log/arkmanager.log."
+        exit 1
+    fi
 else
-    arkmanager start --noautoupdate
+    if ! arkmanager start --noautoupdate; then
+        log "ARK startup failed; check /ark/log/arkmanager.log."
+        exit 1
+    fi
 fi
 
 # Stop server in case of signal INT or TERM
