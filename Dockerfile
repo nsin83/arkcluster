@@ -18,7 +18,7 @@ RUN <<EOT bash # Install dependencies and clean up
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOT
 
-ARG ARKMANAGER_VERSION=1.6.67
+ARG ARKMANAGER_VERSION=1.6.69
 
 ENV USER_ID=1000 \
     GROUP_ID=1000
@@ -30,7 +30,7 @@ RUN <<EOT bash # Add steam user
 EOT
 
 RUN <<EOT bash # Install ark-server-tools
-    curl -sqL "https://github.com/arkmanager/ark-server-tools/archive/refs/tags/v${ARKMANAGER_VERSION}.tar.gz" | tar zxvf -
+    curl -fsSL "https://github.com/arkmanager/ark-server-tools/archive/refs/tags/v${ARKMANAGER_VERSION}.tar.gz" | tar zxvf -
     pushd "./ark-server-tools-${ARKMANAGER_VERSION}/tools"
     ./install.sh steam --bindir=/usr/bin
     popd
@@ -63,7 +63,7 @@ RUN <<EOT bash # Install steamcmd
     ln -s /ark/steam /home/steam/Steam
     ln -s /ark/.steam /home/steam/.steam
     mkdir -p ~/steamcmd && cd ~/steamcmd
-    curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
+    curl -fsSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
     ./steamcmd.sh +quit
 EOT
 
